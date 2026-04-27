@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دعوة الخطوبة | أحمد و هاجر</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#c9a66b',
+                        secondary: '#f5e6d3',
+                        accent: '#8b7355',
+                        dark: '#2d2d2d',
+                        glass: 'rgba(255, 255, 255, 0.1)',
+                    },
+                    fontFamily: {
+                        sans: ['Tajawal', 'sans-serif'],
+                        serif: ['Amiri', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        body { 
+            font-family: 'Tajawal', sans-serif; 
+            background-color: #1a1a2e;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        .glass-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://i.postimg.cc/sgfyvD2d/photo-1518621736915-f3b1c41bfd00.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            z-index: -1;
+        }
+        
+        .glass-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            z-index: -1;
+        }
+        
+        #openingOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a1a;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        #openingOverlay.hidden {
+            opacity: 0;
+            transform: scale(1.1);
+            pointer-events: none;
+            transition: opacity 1.5s ease, transform 1.5s ease;
+        }
+        
+        #clickToEnter {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 200;
+            background: linear-gradient(135deg, #c9a66b 0%, #8b7355 100%);
+            color: white;
+            padding: 20px 50px;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 10px 40px rgba(201, 166, 107, 0.5);
+            animation: pulseGlow 1.5s infinite;
+            transition: all 0.3s ease;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        #clickToEnter:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 0 15px 50px rgba(201, 166, 107, 0.7);
+        }
+        
+        #clickToEnter.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 10px 40px rgba(201, 166, 107, 0.5); }
+            50% { box-shadow: 0 15px 60px rgba(201, 166, 107, 0.8); }
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .video-container video {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
+        
+        .couple-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            opacity: 0;
+            transform: scale(1.1);
+            transition: opacity 2s ease, transform 2s ease;
+            display: none;
+        }
+        
+        .couple-image.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .centerHeart {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 12rem;
+            color: #c9a66b;
+            cursor: pointer;
+            z-index: 100;
+            filter: drop-shadow(0 0 40px rgba(201, 166, 107, 0.9));
+            transition: all 0.8s ease;
+        }
+        
+        .centerHeart.visible {
+            animation: heartAppear 1.5s ease-out forwards;
+        }
+        
+        .centerHeart:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            filter: drop-shadow(0 0 60px rgba(201, 166, 107, 1));
+        }
+        
+        .centerHeart.clicked {
+            color: #8b0000;
+            filter: drop-shadow(0 0 80px rgba(139, 0, 0, 1));
+            transform: translate(-50%, -50%) scale(1.3);
+        }
+        
+        .centerHeart.opened {
+            transform: translate(-50%, -50%) scale(0) rotate(360deg);
+            opacity: 0;
+        }
+        
+        @keyframes heartAppear {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.4);
+            }
+            70% {
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .clickHint {
+            position: absolute;
+            bottom: 8%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 1.6rem;
+            animation: hintPulse 2s infinite;
+            z-index: 100;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+            opacity: 0;
+        }
+        
+        .clickHint.visible {
+            opacity: 1;
+        }
+        
+        @keyframes hintPulse {
+            0%, 100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            50% { opacity: 0.5; transform: translateX(-50%) translateY(-10px); }
+        }
+        
+        .floatingHeart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 2rem;
+            animation: floatUp 4s ease-in infinite;
+            text-shadow: 0 0 10px rgba(255,255,255,0.8);
+            z-index: 50;
+        }
+        
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) scale(1) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        #musicPlayer {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 10px 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        #musicPlayer:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+        
+        .musicBtn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #c9a66b 0%, #8b7355 100%);
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .musicBtn:hover {
+            transform: scale(1.1);
+        }
+        
+        .musicBtn.playing {
+            animation: rotate 3s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .musicVisualizer {
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            height: 30px;
+        }
+        
+        .musicBar {
+            width: 4px;
+            background: linear-gradient(to top, #c9a66b, #f5e6d3);
+            border-radius: 2px;
+            animation: visualize 0.5s ease-in-out infinite;
+        }
+        
+        .musicBar:nth-child(1) { animation-delay: 0s; height: 15px; }
+        .musicBar:nth-child(2) { animation-delay: 0.1s; height: 25px; }
+        .musicBar:nth-child(3) { animation-delay: 0.2s; height: 20px; }
+        .musicBar:nth-child(4) { animation-delay: 0.3s; height: 30px; }
+        .musicBar:nth-child(5) { animation-delay: 0.4s; height: 18px; }
+        
+        @keyframes visualize {
+            0%, 100% { transform: scaleY(0.5); }
+            50% { transform: scaleY(1); }
+        }
+        
+        .musicBar.paused {
+            animation-play-state: paused;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .photo-gallery {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 20px;
+            padding: 20px;
+            scrollbar-width: none;
+        }
+        
+        .photo-gallery::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .photo-item {
+            flex: 0 0 300px;
+            scroll-snap-align: center;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: slideIn 0.5s ease-out;
+            position: relative;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .photo-item img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .photo-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .photo-item .photo-date {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 8px;
+            font-size: 0.8rem;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .photo-item:hover .photo-date {
+            opacity: 1;
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .heart-beat {
+            animation: heartbeat 1.5s infinite;
+        }
+        
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            14% { transform: scale(1.3); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.3); }
+            70% { transform: scale(1); }
+        }
+        
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        .flip-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .flip-card {
+            position: relative;
+            width: 80px;
+            height: 100px;
+            background: linear-gradient(135deg, #c9a66b 0%, #8b7355 100%);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .flip-card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(0,0,0,0.2);
+            transform: translateY(-50%);
+            z-index: 10;
+        }
+        
+        .flip-top, .flip-bottom {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: white;
+            font-family: 'Amiri', serif;
+        }
+        
+        .flip-top {
+            top: 0;
+            background: linear-gradient(180deg, #c9a66b 0%, #b8965a 100%);
+            border-radius: 10px 10px 0 0;
+            transform-origin: bottom;
+        }
+        
+        .flip-bottom {
+            bottom: 0;
+            background: linear-gradient(180deg, #b8965a 0%, #8b7355 100%);
+            border-radius: 0 0 10px 10px;
+            transform-origin: top;
+        }
+        
+        .flip-label {
+            margin-top: 10px;
+            color: #f5e6d3;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .upload-btn {
+            background: linear-gradient(135deg, #c9a66b 0%, #8b7355 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .upload-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(201, 166, 107, 0.4);
+        }
+        
+        .upload-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        #photoInput {
+            display: none;
+        }
+        
+        .upload-status {
+            margin-top: 15px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        .upload-status.success {
+            background: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+            border: 1px solid #28a745;
+            display: block;
+        }
+        
+        .upload-status.error {
+            background: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+            border: 1px solid #dc3545;
+            display: block;
+        }
+        
+        .upload-status.loading {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+            border: 1px solid #ffc107;
+            display: block;
+        }
+        
+        .sync-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.8rem;
+            color: #28a745;
+            margin-right: 10px;
+        }
+        
+        .sync-indicator.syncing {
+            color: #ffc107;
+        }
+        
+        .sync-indicator i {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .cloud-badge {
+            background: linear-gradient(135deg, #4285f4, #34a853, #fbbc05, #ea4335);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        
+        .cloud-badge i {
+            font-size: 0.9rem;
+        }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); }
+        ::-webkit-scrollbar-thumb { background: #c9a66b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #8b7355; }
+    </style>
+</head>
+<body class="text-white">
+
+    <div class="glass-bg"></div>
+    <div class="glass-overlay"></div>
+
+    <div id="openingOverlay">
+        <button id="clickToEnter" onclick="enterWebsite()">
+            <i class="fas fa-play ml-2"></i>
+            اضغط لفتح الدعوة
+        </button>
+        
+        <div class="video-container" id="videoContainer">
+            <video id="introVideo" playsinline>
+                <source src="https://res.cloudinary.com/daejiq0gc/video/upload/f_auto:video/%D8%A7%D8%BA%D9%86%D9%8A%D8%A9___%D8%A7%D9%87_%D9%8A%D8%A7_%D8%A8%D8%AE%D8%AA%D9%8A_%D8%A8%D9%8A%D9%87%D8%A7__%D8%B3%D8%AD%D8%B1%D8%A7%D9%86%D9%8A_%D9%88_%D8%B9%D9%8A%D9%88%D9%86%D9%87_%D8%AC%D8%A8%D8%A7%D8%B1%D9%87_%D8%A7%D9%84%D8%B2%D9%8A%D9%86___Audio_Ah_Ya_Ba5te_Beha___ELzayn___lzhymg?_s=vp-3.13.0" type="video/mp4">
+                متصفحك لا يدعم تشغيل الفيديو
+            </video>
+        </div>
+        
+        <img src="https://i.pinimg.com/564x/d4/7b/94/d47b94d417364a665592cb7dcc22bf96.jpg" alt="أحمد و هاجر" class="couple-image" id="coupleImage">
+        
+        <div class="centerHeart" id="centerHeart" onclick="openWebsite()">
+            <i class="fas fa-heart"></i>
+        </div>
+        
+        <p class="clickHint" id="clickHint">اضغط على القلب لفتح الدعوة ✨</p>
+        
+        <div id="floatingHearts"></div>
+    </div>
+
+    <div id="musicPlayer">
+        <button class="musicBtn" id="musicBtn" onclick="toggleMusic()">
+            <i class="fas fa-play" id="musicIcon"></i>
+        </button>
+        <div class="musicVisualizer">
+            <div class="musicBar paused" id="bar1"></div>
+            <div class="musicBar paused" id="bar2"></div>
+            <div class="musicBar paused" id="bar3"></div>
+            <div class="musicBar paused" id="bar4"></div>
+            <div class="musicBar paused" id="bar5"></div>
+        </div>
+        <span class="text-sm font-medium hidden md:block">الطعمه - عمرو دياب</span>
+    </div>
+
+    <audio id="weddingMusic">
+        <source src="https://serv100.albumaty.com/song2022/Albumaty.Com_amrw_dyab_altaamh_-_rymkys_mkswm.mp3" type="audio/mpeg">
+    </audio>
+
+    <nav class="fixed w-full z-50 glass-card m-4 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-serif font-bold text-primary">أحمد & هاجر</div>
+            <div class="hidden md:flex space-x-8 space-x-reverse text-gray-200 font-medium">
+                <a href="#home" class="hover:text-primary transition">الرئيسية</a>
+                <a href="#story" class="hover:text-primary transition">قصتنا</a>
+                <a href="#details" class="hover:text-primary transition">تفاصيل الخطوبة</a>
+                <a href="#photos" class="hover:text-primary transition">صورنا</a>
+            </div>
+            <button class="md:hidden text-gray-200 focus:outline-none" onclick="toggleMenu()">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden glass-card m-4 p-4 flex flex-col space-y-4 text-center">
+            <a href="#home" class="block hover:text-primary" onclick="toggleMenu()">الرئيسية</a>
+            <a href="#story" class="block hover:text-primary" onclick="toggleMenu()">قصتنا</a>
+            <a href="#details" class="block hover:text-primary" onclick="toggleMenu()">تفاصيل الخطوبة</a>
+            <a href="#photos" class="block hover:text-primary" onclick="toggleMenu()">صورنا</a>
+        </div>
+    </nav>
+
+    <section id="home" class="min-h-screen flex items-center justify-center text-center text-white relative px-4">
+        <div class="relative z-10 fade-in">
+            <p class="text-lg md:text-xl mb-4 tracking-widest uppercase font-light text-secondary">ندعوكم لحضور خطوبة</p>
+            <h1 class="text-5xl md:text-7xl font-serif font-bold mb-6 text-white drop-shadow-lg">أحمد <span class="text-primary">&</span> هاجر</h1>
+            <div class="w-24 h-1 bg-primary mx-auto mb-6"></div>
+            <p class="text-2xl md:text-3xl font-light mb-2">5 أبريل 2026</p>
+            <p class="text-lg md:text-xl font-medium text-secondary mb-4">الساعة 7 مساءاً</p>
+            
+            <div class="countdown-container" id="countdown">
+                <div class="flip-unit">
+                    <div class="flip-card">
+                        <div class="flip-top" id="daysTop">00</div>
+                        <div class="flip-bottom" id="daysBottom">00</div>
+                    </div>
+                    <span class="flip-label">يوم</span>
+                </div>
+                <div class="flip-unit">
+                    <div class="flip-card">
+                        <div class="flip-top" id="hoursTop">00</div>
+                        <div class="flip-bottom" id="hoursBottom">00</div>
+                    </div>
+                    <span class="flip-label">ساعة</span>
+                </div>
+                <div class="flip-unit">
+                    <div class="flip-card">
+                        <div class="flip-top" id="minutesTop">00</div>
+                        <div class="flip-bottom" id="minutesBottom">00</div>
+                    </div>
+                    <span class="flip-label">دقيقة</span>
+                </div>
+                <div class="flip-unit">
+                    <div class="flip-card">
+                        <div class="flip-top" id="secondsTop">00</div>
+                        <div class="flip-bottom" id="secondsBottom">00</div>
+                    </div>
+                    <span class="flip-label">ثانية</span>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-10 animate-bounce">
+            <i class="fas fa-chevron-down text-3xl text-white/80"></i>
+        </div>
+    </section>
+
+    <section id="story" class="py-20 px-4">
+        <div class="container mx-auto">
+            <div class="glass-card p-8 md:p-12 fade-in">
+                <div class="flex flex-col md:flex-row items-center gap-12">
+                    <div class="md:w-1/2">
+                        <img src="https://image.qwenlm.ai/public_source/46ac2db5-e958-4e96-afd7-768beb66e938/19c8f5dfb-f170-4cd4-a4d4-fd635ad9f18c.png" alt="خواتم الخطوبة" class="rounded-lg shadow-2xl w-full h-auto object-cover transform hover:scale-105 transition duration-500">
+                    </div>
+                    <div class="md:w-1/2 text-right">
+                        <h2 class="text-4xl font-serif font-bold text-primary mb-6">قصتنا</h2>
+                        <p class="text-gray-200 leading-loose text-lg mb-4">
+                            في يوم 8 أبريل 2026، جمعتنا الأقدار في مكان واحد، وكانت نظرة العيون الأولى كافية لتخبرنا أن هناك قصة حب ستبدأ من هذه اللحظة.
+                        </p>
+                        <p class="text-gray-200 leading-loose text-lg mb-4">
+                            هاجر، بابتسامتها الدافئة وقلبها الطيب، استطاعت أن تأسر قلبي من أول لقاء. عبرنا معاً العديد من الذكريات الجميلة، وتشاركنا الأحلام والطموحات.
+                        </p>
+                        <p class="text-gray-200 leading-loose text-lg mb-6">
+                            واليوم، نحن على أتم الاستعداد لبدء فصل جديد من حياتنا معاً، ونتشرف بدعوتكم لمشاركتنا فرحتنا في حفل الخطوبة الذي سيبقى في ذاكرتنا للأبد.
+                        </p>
+                        <div class="flex items-center gap-4 text-primary font-bold">
+                            <i class="fas fa-heart heart-beat text-red-400"></i>
+                            <span>مع الحب، أحمد و هاجر</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="details" class="py-20 px-4">
+        <div class="container mx-auto">
+            <div class="glass-card p-8 md:p-12 fade-in">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-serif font-bold text-primary mb-4">تفاصيل الخطوبة</h2>
+                    <p class="text-gray-200">نتشرف بوجودكم معنا في هذا اليوم السعيد</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="text-right space-y-8">
+                        <div class="flex items-start gap-4">
+                            <div class="glass-card p-4 rounded-full text-primary">
+                                <i class="far fa-calendar-alt text-2xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">التاريخ</h3>
+                                <p class="text-gray-200">الأحد، 5 أبريل 2026</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="glass-card p-4 rounded-full text-primary">
+                                <i class="far fa-clock text-2xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">الوقت</h3>
+                                <p class="text-gray-200">يبدأ الحفل في الساعة 7:00 مساءً</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="glass-card p-4 rounded-full text-primary">
+                                <i class="fas fa-map-marker-alt text-2xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">المكان</h3>
+                                <p class="text-gray-200">منزل العروسة</p>
+                                <p class="text-sm text-gray-400">بني سويف</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="glass-card p-4 rounded-full text-primary">
+                                <i class="fas fa-heart text-2xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">أول لقاء</h3>
+                                <p class="text-gray-200">8 أبريل 2026</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="https://image.qwenlm.ai/public_source/46ac2db5-e958-4e96-afd7-768beb66e938/100abd64e-9690-4cbb-b44c-1b4f8fbf0f6a.png" alt="حفل الخطوبة" class="rounded-lg shadow-2xl w-full h-auto object-cover">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="photos" class="py-20 px-4">
+        <div class="container mx-auto">
+            <div class="glass-card p-8 md:p-12 fade-in">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-serif font-bold text-primary mb-4">صورنا</h2>
+                    <p class="text-gray-200 mb-4">لحظات من حبنا نشاركها معكم</p>
+                    
+                    <div class="cloud-badge">
+                        <i class="fas fa-cloud"></i>
+                        <span>متزامن مع السحابة - Postimg</span>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <label for="photoInput" class="upload-btn cursor-pointer" id="uploadBtn">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            رفع صورة للسحابة
+                        </label>
+                        <input type="file" id="photoInput" accept="image/*" onchange="handlePhotoUpload(event)">
+                        <div id="uploadStatus" class="upload-status"></div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between items-center mb-4 px-4">
+                    <div class="flex items-center gap-2">
+                        <div class="sync-indicator" id="syncIndicator">
+                            <i class="fas fa-check-circle"></i>
+                            <span>متزامن مع السحابة</span>
+                        </div>
+                    </div>
+                    <button onclick="syncFromCloud()" class="text-primary hover:text-secondary transition flex items-center gap-2 text-sm">
+                        <i class="fas fa-sync-alt"></i>
+                        تحديث من السحابة
+                    </button>
+                </div>
+                
+                <div class="photo-gallery" id="photoGallery">
+                </div>
+                
+                <p class="text-center text-gray-400 mt-8 text-sm">
+                    <i class="fas fa-info-circle"></i>
+                    الصور المحملة يتم حفظها تلقائياً على سحابة Postimg وستظهر على جميع الأجهزة
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="glass-card m-4 py-12">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl font-serif font-bold mb-6 text-primary">أحمد & هاجر</h2>
+            <div class="flex justify-center space-x-6 space-x-reverse mb-8">
+                <a href="https://www.facebook.com/ahmed.abdalbaadea?mibextid=LQQJ4d" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:bg-primary transition" title="فيسبوك">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="https://x.com/_bade_3" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:bg-primary transition" title="X (تويتر)">
+                    <i class="fa-brands fa-x-twitter"></i>
+                </a>
+                <a href="https://instagram.com/ahmed.abdalbaadea" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:bg-primary transition" title="انستجرام">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+            
+            <div class="mb-8">
+                <p class="text-primary font-serif text-xl mb-4">تم التصميم بكل حب ❤️</p>
+                <img src="https://i.postimg.cc/9X9srHCR/w_removebg_preview_removebg_preview.png" alt="Logo" class="w-32 h-32 mx-auto object-contain hover:scale-110 transition duration-300">
+            </div>
+            
+            <p class="text-gray-400 text-sm">© 2026 جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Postimg Configuration
+        const POSTIMG_CONFIG = {
+            apiKey: '', // ضع مفتاح API هنا من إعدادات حسابك على Postimg
+            albumId: 'tWbrHwp', // معرف الألبوم
+            apiUrl: 'https://postimg.cc/api/upload',
+            galleryUrl: 'https://postimg.cc/gallery/tWbrHwp'
+        };
+
+        // Floating Hearts
+        function createFloatingHearts() {
+            const container = document.getElementById('floatingHearts');
+            const heartSymbols = ['❤️', '💕', '💗', '💖', '✨', '💝'];
+            
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'floatingHeart';
+                heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.fontSize = (Math.random() * 2 + 1.5) + 'rem';
+                heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                
+                container.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 5000);
+            }, 400);
+        }
+        
+        // Enter Website
+        function enterWebsite() {
+            const clickButton = document.getElementById('clickToEnter');
+            const video = document.getElementById('introVideo');
+            const coupleImage = document.getElementById('coupleImage');
+            const heart = document.getElementById('centerHeart');
+            const clickHint = document.getElementById('clickHint');
+            const videoContainer = document.getElementById('videoContainer');
+            
+            clickButton.classList.add('hidden');
+            
+            video.muted = false;
+            video.volume = 1.0;
+            video.loop = false;
+            video.removeAttribute('loop');
+            
+            video.play().then(() => {
+                console.log('Video playing with sound!');
+            }).catch(error => {
+                console.log('Video play error:', error);
+            });
+            
+            video.onended = function() {
+                console.log('Video ended, showing couple image');
+                
+                videoContainer.style.display = 'none';
+                
+                coupleImage.style.display = 'block';
+                setTimeout(() => {
+                    coupleImage.classList.add('visible');
+                }, 100);
+                
+                setTimeout(() => {
+                    coupleImage.style.opacity = '0';
+                    coupleImage.style.transform = 'scale(1.1)';
+                    
+                    setTimeout(() => {
+                        coupleImage.style.display = 'none';
+                        heart.classList.add('visible');
+                        clickHint.classList.add('visible');
+                    }, 2000);
+                }, 5000);
+            };
+        }
+        
+        // Open Website
+        function openWebsite() {
+            const heart = document.getElementById('centerHeart');
+            const overlay = document.getElementById('openingOverlay');
+            
+            if (heart.classList.contains('opened')) return;
+            
+            heart.classList.add('clicked');
+            playMusic();
+            createHeartExplosion();
+            
+            setTimeout(() => {
+                heart.classList.add('opened');
+                
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                        // Load photos from cloud after opening
+                        syncFromCloud();
+                    }, 1500);
+                }, 800);
+            }, 500);
+        }
+        
+        function createHeartExplosion() {
+            const overlay = document.getElementById('openingOverlay');
+            const colors = ['#e91e63', '#ffd700', '#ff69b4', '#fff', '#c9a66b', '#8b0000'];
+            
+            for (let i = 0; i < 100; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.left = '50%';
+                particle.style.top = '50%';
+                particle.style.width = '15px';
+                particle.style.height = '15px';
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.borderRadius = '50%';
+                particle.style.pointerEvents = 'none';
+                particle.style.zIndex = '100';
+                particle.style.boxShadow = '0 0 15px ' + particle.style.background;
+                
+                const angle = (Math.random() * 360) * (Math.PI / 180);
+                const velocity = 200 + Math.random() * 350;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+                
+                particle.style.transition = 'all 1.5s ease-out';
+                overlay.appendChild(particle);
+                
+                setTimeout(() => {
+                    particle.style.transform = `translate(${tx}px, ${ty}px)`;
+                    particle.style.opacity = '0';
+                }, 10);
+                
+                setTimeout(() => {
+                    particle.remove();
+                }, 1600);
+            }
+        }
+
+        // Music Player
+        const audioElement = document.getElementById('weddingMusic');
+        const musicBtn = document.getElementById('musicBtn');
+        const musicIcon = document.getElementById('musicIcon');
+        const musicBars = document.querySelectorAll('.musicBar');
+        let isPlaying = false;
+
+        function playMusic() {
+            audioElement.volume = 0.8;
+            audioElement.currentTime = 15;
+            
+            audioElement.play().then(() => {
+                isPlaying = true;
+                updateMusicUI();
+            }).catch(error => {
+                console.log('Music play error:', error);
+            });
+        }
+
+        function toggleMusic() {
+            if (isPlaying) {
+                audioElement.pause();
+                isPlaying = false;
+            } else {
+                audioElement.play();
+                isPlaying = true;
+            }
+            updateMusicUI();
+        }
+
+        function updateMusicUI() {
+            if (isPlaying) {
+                musicIcon.classList.remove('fa-play');
+                musicIcon.classList.add('fa-pause');
+                musicBtn.classList.add('playing');
+                musicBars.forEach(bar => bar.classList.remove('paused'));
+            } else {
+                musicIcon.classList.remove('fa-pause');
+                musicIcon.classList.add('fa-play');
+                musicBtn.classList.remove('playing');
+                musicBars.forEach(bar => bar.classList.add('paused'));
+            }
+        }
+
+        // Cloud Photo Management
+        async function uploadToPostimg(file) {
+            const formData = new FormData();
+            formData.append('image', file);
+            formData.append('key', POSTIMG_CONFIG.apiKey);
+            formData.append('album', POSTIMG_CONFIG.albumId);
+            
+            showUploadStatus('loading', 'جاري رفع الصورة إلى السحابة...');
+            
+            try {
+                const response = await fetch(POSTIMG_CONFIG.apiUrl, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.url) {
+                    return data.url;
+                } else {
+                    throw new Error(data.error || 'فشل الرفع');
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                throw error;
+            }
+        }
+        
+        async function fetchPhotosFromGallery() {
+            // Postimg doesn't have a public API for gallery listing
+            // We'll use localStorage as primary and offer manual sync
+            const savedPhotos = JSON.parse(localStorage.getItem('weddingPhotos') || '[]');
+            return savedPhotos;
+        }
+        
+        function addPhotoToGallery(imageSrc, uploadDate = null) {
+            const gallery = document.getElementById('photoGallery');
+            const photoItem = document.createElement('div');
+            photoItem.className = 'photo-item';
+            
+            const date = uploadDate || new Date().toISOString();
+            const formattedDate = new Date(date).toLocaleDateString('ar-EG', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            photoItem.innerHTML = `
+                <img src="${imageSrc}" alt="صورة">
+                <div class="photo-date">${formattedDate}</div>
+            `;
+            
+            gallery.insertBefore(photoItem, gallery.firstChild);
+        }
+        
+        function savePhotoToStorage(imageSrc) {
+            let photos = JSON.parse(localStorage.getItem('weddingPhotos') || '[]');
+            photos.unshift({
+                url: imageSrc,
+                date: new Date().toISOString()
+            });
+            if (photos.length > 50) photos = photos.slice(0, 50);
+            localStorage.setItem('weddingPhotos', JSON.stringify(photos));
+        }
+        
+        async function handlePhotoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const uploadBtn = document.getElementById('uploadBtn');
+            uploadBtn.disabled = true;
+            uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الرفع...';
+            
+            try {
+                // Try to upload to Postimg if API key is set
+                if (POSTIMG_CONFIG.apiKey) {
+                    const imageUrl = await uploadToPostimg(file);
+                    addPhotoToGallery(imageUrl);
+                    savePhotoToStorage(imageUrl);
+                    showUploadStatus('success', 'تم رفع الصورة بنجاح إلى السحابة ✅');
+                } else {
+                    // Fallback to localStorage
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const base64Url = e.target.result;
+                        addPhotoToGallery(base64Url);
+                        savePhotoToStorage(base64Url);
+                        showUploadStatus('success', 'تم حفظ الصورة محلياً (أضف مفتاح API للسحابة) ⚠️');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            } catch (error) {
+                console.error('Upload failed:', error);
+                
+                // Fallback
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64Url = e.target.result;
+                    addPhotoToGallery(base64Url);
+                    savePhotoToStorage(base64Url);
+                    showUploadStatus('error', 'فشل الرفع للسحابة - تم الحفظ محلياً');
+                };
+                reader.readAsDataURL(file);
+            } finally {
+                uploadBtn.disabled = false;
+                uploadBtn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> رفع صورة للسحابة';
+                event.target.value = '';
+            }
+        }
+        
+        function showUploadStatus(type, message) {
+            const statusEl = document.getElementById('uploadStatus');
+            statusEl.className = `upload-status ${type}`;
+            statusEl.textContent = message;
+            statusEl.style.display = 'block';
+            
+            if (type !== 'loading') {
+                setTimeout(() => {
+                    statusEl.style.display = 'none';
+                }, 5000);
+            }
+        }
+        
+        async function syncFromCloud() {
+            const syncIndicator = document.getElementById('syncIndicator');
+            syncIndicator.classList.add('syncing');
+            syncIndicator.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> <span>جاري المزامنة...</span>';
+            
+            try {
+                const photos = await fetchPhotosFromGallery();
+                const gallery = document.getElementById('photoGallery');
+                gallery.innerHTML = '';
+                
+                photos.forEach(photo => {
+                    const photoData = typeof photo === 'string' ? { url: photo, date: null } : photo;
+                    addPhotoToGallery(photoData.url, photoData.date);
+                });
+                
+                syncIndicator.classList.remove('syncing');
+                syncIndicator.innerHTML = '<i class="fas fa-check-circle"></i> <span>متزامن مع السحابة</span>';
+            } catch (error) {
+                syncIndicator.classList.remove('syncing');
+                syncIndicator.innerHTML = '<i class="fas fa-exclamation-circle"></i> <span>خطأ في المزامنة</span>';
+            }
+        }
+        
+        function loadPhotosFromStorage() {
+            const photos = JSON.parse(localStorage.getItem('weddingPhotos') || '[]');
+            const gallery = document.getElementById('photoGallery');
+            
+            photos.forEach(photo => {
+                const photoData = typeof photo === 'string' ? { url: photo, date: null } : photo;
+                addPhotoToGallery(photoData.url, photoData.date);
+            });
+        }
+
+        // Countdown Timer
+        let countdownInterval;
+        
+        function initCountdown() {
+            const weddingDate = new Date('April 5, 2026 19:00:00').getTime();
+            
+            function updateCountdown() {
+                const currentTime = new Date().getTime();
+                const distance = weddingDate - currentTime;
+
+                if (distance < 0) {
+                    clearInterval(countdownInterval);
+                    setFlipCard('days', '00');
+                    setFlipCard('hours', '00');
+                    setFlipCard('minutes', '00');
+                    setFlipCard('seconds', '00');
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                setFlipCard('days', days);
+                setFlipCard('hours', hours);
+                setFlipCard('minutes', minutes);
+                setFlipCard('seconds', seconds);
+            }
+            
+            updateCountdown();
+            countdownInterval = setInterval(updateCountdown, 1000);
+        }
+        
+        function setFlipCard(type, value) {
+            const paddedValue = value.toString().padStart(2, '0');
+            const topElement = document.getElementById(`${type}Top`);
+            const bottomElement = document.getElementById(`${type}Bottom`);
+            
+            if (topElement && bottomElement) {
+                topElement.textContent = paddedValue;
+                bottomElement.textContent = paddedValue;
+            }
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('shadow-md');
+            }
+        });
+
+        audioElement.addEventListener('timeupdate', () => {
+            if (isPlaying) {
+                musicBars.forEach((bar, index) => {
+                    const randomHeight = Math.random() * 25 + 10;
+                    bar.style.height = randomHeight + 'px';
+                });
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initCountdown();
+            createFloatingHearts();
+            loadPhotosFromStorage();
+            console.log('Website loaded with cloud sync - Postimg Gallery:', POSTIMG_CONFIG.galleryUrl);
+        });
+    </script>
+</body>
+</html>
+
