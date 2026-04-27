@@ -666,37 +666,41 @@
             <p class="text-lg md:text-xl mb-4 tracking-widest uppercase font-light text-secondary">ندعوكم لحضور خطوبة</p>
             <h1 class="text-5xl md:text-7xl font-serif font-bold mb-6 text-white drop-shadow-lg">أحمد <span class="text-primary">&</span> هاجر</h1>
             <div class="w-24 h-1 bg-primary mx-auto mb-6"></div>
-            <p class="text-2xl md:text-3xl font-light mb-2">5 أبريل 2026</p>
-            <p class="text-lg md:text-xl font-medium text-secondary mb-4">الساعة 7 مساءاً</p>
+            <p class="text-2xl md:text-3xl font-light mb-2">8 أبريل 2026</p>
+            <p class="text-lg md:text-xl font-medium text-secondary mb-4">تاريخ خطبتنا الجميلة</p>
             
-            <div class="countdown-container" id="countdown">
-                <div class="flip-unit">
-                    <div class="flip-card">
-                        <div class="flip-top" id="daysTop">00</div>
-                        <div class="flip-bottom" id="daysBottom">00</div>
+            <!-- Elapsed Time Since Date -->
+            <div class="mb-8">
+                <p class="text-xl font-medium text-secondary mb-4 font-serif">مضى على أول لقاء</p>
+                <div class="countdown-container" id="countdown">
+                    <div class="flip-unit">
+                        <div class="flip-card">
+                            <div class="flip-top" id="daysTop">00</div>
+                            <div class="flip-bottom" id="daysBottom">00</div>
+                        </div>
+                        <span class="flip-label">يوم</span>
                     </div>
-                    <span class="flip-label">يوم</span>
-                </div>
-                <div class="flip-unit">
-                    <div class="flip-card">
-                        <div class="flip-top" id="hoursTop">00</div>
-                        <div class="flip-bottom" id="hoursBottom">00</div>
+                    <div class="flip-unit">
+                        <div class="flip-card">
+                            <div class="flip-top" id="hoursTop">00</div>
+                            <div class="flip-bottom" id="hoursBottom">00</div>
+                        </div>
+                        <span class="flip-label">ساعة</span>
                     </div>
-                    <span class="flip-label">ساعة</span>
-                </div>
-                <div class="flip-unit">
-                    <div class="flip-card">
-                        <div class="flip-top" id="minutesTop">00</div>
-                        <div class="flip-bottom" id="minutesBottom">00</div>
+                    <div class="flip-unit">
+                        <div class="flip-card">
+                            <div class="flip-top" id="minutesTop">00</div>
+                            <div class="flip-bottom" id="minutesBottom">00</div>
+                        </div>
+                        <span class="flip-label">دقيقة</span>
                     </div>
-                    <span class="flip-label">دقيقة</span>
-                </div>
-                <div class="flip-unit">
-                    <div class="flip-card">
-                        <div class="flip-top" id="secondsTop">00</div>
-                        <div class="flip-bottom" id="secondsBottom">00</div>
+                    <div class="flip-unit">
+                        <div class="flip-card">
+                            <div class="flip-top" id="secondsTop">00</div>
+                            <div class="flip-bottom" id="secondsBottom">00</div>
+                        </div>
+                        <span class="flip-label">ثانية</span>
                     </div>
-                    <span class="flip-label">ثانية</span>
                 </div>
             </div>
         </div>
@@ -749,7 +753,7 @@
                             </div>
                             <div>
                                 <h3 class="text-xl font-bold mb-2">التاريخ</h3>
-                                <p class="text-gray-200">الأحد، 5 أبريل 2026</p>
+                                <p class="text-gray-200">8 أبريل 2026</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-4">
@@ -1068,8 +1072,6 @@
         }
         
         async function fetchPhotosFromGallery() {
-            // Postimg doesn't have a public API for gallery listing
-            // We'll use localStorage as primary and offer manual sync
             const savedPhotos = JSON.parse(localStorage.getItem('weddingPhotos') || '[]');
             return savedPhotos;
         }
@@ -1113,14 +1115,12 @@
             uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الرفع...';
             
             try {
-                // Try to upload to Postimg if API key is set
                 if (POSTIMG_CONFIG.apiKey) {
                     const imageUrl = await uploadToPostimg(file);
                     addPhotoToGallery(imageUrl);
                     savePhotoToStorage(imageUrl);
                     showUploadStatus('success', 'تم رفع الصورة بنجاح إلى السحابة ✅');
                 } else {
-                    // Fallback to localStorage
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         const base64Url = e.target.result;
@@ -1133,7 +1133,6 @@
             } catch (error) {
                 console.error('Upload failed:', error);
                 
-                // Fallback
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const base64Url = e.target.result;
@@ -1195,18 +1194,21 @@
             });
         }
 
-        // Countdown Timer
-        let countdownInterval;
+        // Elapsed Time Since First Meeting (08-04-2026)
+        let elapsedInterval;
         
-        function initCountdown() {
-            const weddingDate = new Date('April 5, 2026 19:00:00').getTime();
+        function initElapsedCounter() {
+            // تاريخ أول لقاء: 8 أبريل 2026
+            const startDate = new Date('April 8, 2026 00:00:00').getTime();
             
-            function updateCountdown() {
+            function updateElapsed() {
                 const currentTime = new Date().getTime();
-                const distance = weddingDate - currentTime;
+                // حساب الوقت المنقضي (الوقت الحالي - تاريخ البداية)
+                const distance = currentTime - startDate;
 
+                // إذا كان الوقت المنقضي سالباً (لم يحين الموعد بعد)، نعرض أصفاراً
                 if (distance < 0) {
-                    clearInterval(countdownInterval);
+                    clearInterval(elapsedInterval);
                     setFlipCard('days', '00');
                     setFlipCard('hours', '00');
                     setFlipCard('minutes', '00');
@@ -1214,6 +1216,7 @@
                     return;
                 }
 
+                // تحويل الميلي ثانية إلى أيام، ساعات، دقائق، ثواني
                 const days = Math.floor(distance / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -1225,8 +1228,8 @@
                 setFlipCard('seconds', seconds);
             }
             
-            updateCountdown();
-            countdownInterval = setInterval(updateCountdown, 1000);
+            updateElapsed();
+            elapsedInterval = setInterval(updateElapsed, 1000);
         }
         
         function setFlipCard(type, value) {
@@ -1281,10 +1284,10 @@
         });
 
         document.addEventListener('DOMContentLoaded', function() {
-            initCountdown();
+            initElapsedCounter(); // تشغيل عداد الوقت المنقضي
             createFloatingHearts();
             loadPhotosFromStorage();
-            console.log('Website loaded with cloud sync - Postimg Gallery:', POSTIMG_CONFIG.galleryUrl);
+            console.log('Website loaded with elapsed counter from April 8, 2026');
         });
     </script>
 </body>
