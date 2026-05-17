@@ -491,6 +491,7 @@
         }
         
         .upload-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .note-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
         
         #photoInput { display: none; }
         
@@ -620,7 +621,6 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #c9a66b, #8b7355);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -728,6 +728,29 @@
             color: white;
         }
         
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            z-index: 10002;
+            opacity: 0;
+            transition: all 0.3s ease;
+            border: 1px solid #c9a66b;
+            font-family: 'Tajawal', sans-serif;
+            pointer-events: none;
+        }
+        
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); }
         ::-webkit-scrollbar-thumb { background: #c9a66b; border-radius: 4px; }
@@ -735,6 +758,9 @@
     </style>
 </head>
 <body class="text-white">
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
 
     <!-- Image Modal -->
     <div class="image-modal" id="imageModal" onclick="closeImageModal()">
@@ -1011,7 +1037,7 @@
                     <textarea class="note-textarea" id="noteTextarea" placeholder="اكتب ملاحظتك هنا... 💕" maxlength="500"></textarea>
                     <div class="flex justify-between items-center mt-4">
                         <span class="text-gray-400 text-sm"><span id="charCount">0</span>/500</span>
-                        <button class="note-submit-btn" onclick="submitNote()">
+                        <button class="note-submit-btn" id="noteSubmitBtn" onclick="submitNote()">
                             <i class="fas fa-paper-plane"></i>
                             إرسال الملاحظة
                         </button>
@@ -1028,7 +1054,7 @@
                 <div class="notes-grid" id="notesGrid" style="display: none;"></div>
                 
                 <!-- Empty State -->
-                <div class="text-center py-10 text-gray-400 hidden" id="notesEmpty">
+                <div class="text-center py-10 text-gray-400" id="notesEmpty" style="display: none;">
                     <i class="fas fa-comment-dots text-5xl mb-4 text-primary/50"></i>
                     <p>لا توجد ملاحظات بعد. ابدأ بكتابة أول ملاحظة!</p>
                 </div>
@@ -1083,6 +1109,17 @@
         const analytics = firebase.analytics();
         const storage = firebase.storage();
         const db = firebase.firestore();
+
+        // Toast notification function
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.borderColor = type === 'error' ? '#e74c3c' : '#c9a66b';
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
 
         // Create Floating Hearts
         function createFloatingHearts() {
@@ -1312,7 +1349,7 @@
                     },
                     (error) => {
                         console.error('Upload error:', error);
-                        alert('حدث خطأ أثناء رفع الصورة');
+                        showToast('حدث خطأ أثناء رفع الصورة', 'error');
                         uploadProgress.style.display = 'none';
                         uploadBtn.style.pointerEvents = 'auto';
                         uploadBtn.style.opacity = '1';
@@ -1343,11 +1380,12 @@
                         progressBarFill.style.width = '0%';
                         progressPercent.textContent = '0%';
                         event.target.value = '';
+                        showToast('تم رفع الصورة بنجاح!');
                     }
                 );
             } catch (error) {
                 console.error('Error:', error);
-                alert('حدث خطأ أثناء رفع الصورة');
+                showToast('حدث خطأ أثناء رفع الصورة', 'error');
                 uploadProgress.style.display = 'none';
                 uploadBtn.style.pointerEvents = 'auto';
                 uploadBtn.style.opacity = '1';
@@ -1372,9 +1410,10 @@
                     photoItem.style.animation = 'slideIn 0.3s ease-out reverse';
                     setTimeout(() => photoItem.remove(), 300);
                 }
+                showToast('تم حذف الصورة');
             } catch (error) {
                 console.error('Delete error:', error);
-                alert('حدث خطأ أثناء حذف الصورة');
+                showToast('حدث خطأ أثناء حذف الصورة', 'error');
             }
         }
 
@@ -1413,13 +1452,14 @@
         async function submitNote() {
             const text = noteTextarea.value.trim();
             if (!text) {
-                alert('اكتب ملاحظتك أولاً!');
+                showToast('اكتب ملاحظتك أولاً!', 'error');
                 return;
             }
             if (isSubmittingNote) return;
             
             isSubmittingNote = true;
-            const submitBtn = document.querySelector('.note-submit-btn');
+            const submitBtn = document.getElementById('noteSubmitBtn');
+            const originalContent = submitBtn.innerHTML;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
             submitBtn.disabled = true;
             
@@ -1433,27 +1473,43 @@
                     minute: '2-digit'
                 });
 
-                const noteRef = await db.collection('wedding-notes').add({
+                // Add note to Firestore
+                const noteData = {
                     author: selectedAuthor,
                     text: text,
                     date: dateStr,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
+                    createdAt: now.toISOString()
+                };
 
-                addNoteElement({
-                    author: selectedAuthor,
-                    text: text,
-                    date: dateStr
-                }, noteRef.id);
+                // Use add() which auto-generates ID - no serverTimestamp needed
+                const noteRef = await db.collection('wedding-notes').add(noteData);
 
+                // Get the generated ID
+                const noteId = noteRef.id;
+
+                // Show the notes grid if it was hidden
+                const notesGrid = document.getElementById('notesGrid');
+                const notesEmpty = document.getElementById('notesEmpty');
+                notesGrid.style.display = 'grid';
+                notesEmpty.style.display = 'none';
+
+                // Add the note to the UI
+                addNoteElement(noteData, noteId);
+
+                // Clear the textarea
                 noteTextarea.value = '';
                 charCount.textContent = '0';
+
+                showToast('تم إرسال الملاحظة بنجاح! 💕');
+                
+                console.log('Note saved successfully with ID:', noteId);
+                
             } catch (error) {
                 console.error('Error submitting note:', error);
-                alert('حدث خطأ أثناء إرسال الملاحظة');
+                showToast('حدث خطأ: ' + error.message, 'error');
             } finally {
                 isSubmittingNote = false;
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الملاحظة';
+                submitBtn.innerHTML = originalContent;
                 submitBtn.disabled = false;
             }
         }
@@ -1473,8 +1529,8 @@
                         ${authorEmoji}
                     </div>
                     <div>
-                        <div class="author-name">${noteData.author}</div>
-                        <div class="note-date">${noteData.date || ''}</div>
+                        <div class="author-name">${escapeHtml(noteData.author)}</div>
+                        <div class="note-date">${escapeHtml(noteData.date || '')}</div>
                     </div>
                 </div>
                 <div class="note-text">${escapeHtml(noteData.text)}</div>
@@ -1483,10 +1539,16 @@
                 </button>
             `;
             
-            notesGrid.insertBefore(noteCard, notesGrid.firstChild);
+            // Insert at the beginning
+            if (notesGrid.firstChild) {
+                notesGrid.insertBefore(noteCard, notesGrid.firstChild);
+            } else {
+                notesGrid.appendChild(noteCard);
+            }
         }
 
         function escapeHtml(text) {
+            if (!text) return '';
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
@@ -1500,25 +1562,29 @@
                 notesGrid.innerHTML = '';
                 
                 const snapshot = await db.collection('wedding-notes')
-                    .orderBy('timestamp', 'desc')
+                    .orderBy('createdAt', 'desc')
                     .get();
                 
+                notesLoading.style.display = 'none';
+                
                 if (snapshot.empty) {
-                    notesLoading.style.display = 'none';
-                    notesEmpty.classList.remove('hidden');
+                    notesEmpty.style.display = 'block';
+                    notesGrid.style.display = 'none';
                 } else {
+                    notesEmpty.style.display = 'none';
+                    notesGrid.style.display = 'grid';
+                    
                     snapshot.forEach(doc => {
                         const data = doc.data();
                         addNoteElement(data, doc.id);
                     });
-                    
-                    notesLoading.style.display = 'none';
-                    notesGrid.style.display = 'grid';
                 }
             } catch (error) {
                 console.error('Error loading notes:', error);
-                document.getElementById('notesLoading').innerHTML = `
-                    <p class="text-red-400">حدث خطأ في تحميل الملاحظات</p>
+                const notesLoading = document.getElementById('notesLoading');
+                notesLoading.innerHTML = `
+                    <p class="text-red-400">حدث خطأ في تحميل الملاحظات: ${error.message}</p>
+                    <p class="text-gray-500 text-sm mt-2">تأكد من قواعد Firestore</p>
                 `;
             }
         }
@@ -1541,13 +1607,14 @@
                         const remaining = document.querySelectorAll('.note-card');
                         if (remaining.length === 0) {
                             document.getElementById('notesGrid').style.display = 'none';
-                            document.getElementById('notesEmpty').classList.remove('hidden');
+                            document.getElementById('notesEmpty').style.display = 'block';
                         }
                     }, 300);
                 }
+                showToast('تم حذف الملاحظة');
             } catch (error) {
                 console.error('Delete note error:', error);
-                alert('حدث خطأ أثناء حذف الملاحظة');
+                showToast('حدث خطأ أثناء حذف الملاحظة', 'error');
             }
         }
 
@@ -1637,6 +1704,13 @@
             loadNotesFromFirebase();
             
             document.getElementById('photoInput').addEventListener('change', handlePhotoUpload);
+            
+            // Allow Ctrl+Enter to submit note
+            document.getElementById('noteTextarea').addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.key === 'Enter') {
+                    submitNote();
+                }
+            });
         });
     </script>
 </body>
