@@ -351,14 +351,8 @@
         }
         
         @keyframes slideIn {
-            from {
-                transform: translateY(30px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
         
         .photo-item img {
@@ -369,9 +363,7 @@
             cursor: pointer;
         }
         
-        .photo-item:hover img {
-            transform: scale(1.05);
-        }
+        .photo-item:hover img { transform: scale(1.05); }
         
         .photo-item .photo-date {
             position: absolute;
@@ -462,14 +454,12 @@
             top: 0;
             background: linear-gradient(180deg, #c9a66b 0%, #b8965a 100%);
             border-radius: 10px 10px 0 0;
-            transform-origin: bottom;
         }
         
         .flip-bottom {
             bottom: 0;
             background: linear-gradient(180deg, #b8965a 0%, #8b7355 100%);
             border-radius: 0 0 10px 10px;
-            transform-origin: top;
         }
         
         .flip-label {
@@ -479,7 +469,7 @@
             font-weight: 500;
         }
         
-        .upload-btn {
+        .upload-btn, .note-submit-btn {
             background: linear-gradient(135deg, #c9a66b 0%, #8b7355 100%);
             color: white;
             padding: 15px 30px;
@@ -492,22 +482,17 @@
             display: inline-flex;
             align-items: center;
             gap: 10px;
+            font-family: 'Tajawal', sans-serif;
         }
         
-        .upload-btn:hover {
+        .upload-btn:hover, .note-submit-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 30px rgba(201, 166, 107, 0.4);
         }
         
-        .upload-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
+        .upload-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
         
-        #photoInput {
-            display: none;
-        }
+        #photoInput { display: none; }
         
         .upload-progress {
             position: fixed;
@@ -522,19 +507,17 @@
             color: white;
         }
         
-        .upload-progress .spinner {
+        .spinner {
             width: 50px;
             height: 50px;
             border: 4px solid rgba(201, 166, 107, 0.3);
             border-top: 4px solid #c9a66b;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spinAnim 1s linear infinite;
             margin: 0 auto 15px;
         }
         
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spinAnim { to { transform: rotate(360deg); } }
         
         .progress-bar-container {
             width: 200px;
@@ -567,9 +550,7 @@
             cursor: pointer;
         }
         
-        .image-modal.active {
-            display: flex;
-        }
+        .image-modal.active { display: flex; }
         
         .image-modal img {
             max-width: 90%;
@@ -597,8 +578,154 @@
             transition: opacity 0.3s;
         }
         
-        .photo-item:hover .delete-photo-btn {
-            opacity: 1;
+        .photo-item:hover .delete-photo-btn { opacity: 1; }
+        
+        /* Notes Section Styles */
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .note-card {
+            background: linear-gradient(135deg, rgba(201, 166, 107, 0.15) 0%, rgba(139, 115, 85, 0.15) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(201, 166, 107, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            position: relative;
+            animation: noteAppear 0.5s ease-out;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .note-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(201, 166, 107, 0.3);
+        }
+        
+        @keyframes noteAppear {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        
+        .note-card .note-author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        
+        .note-card .author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #c9a66b, #8b7355);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+        }
+        
+        .note-card .author-name {
+            font-weight: bold;
+            color: #c9a66b;
+            font-size: 1rem;
+        }
+        
+        .note-card .note-date {
+            font-size: 0.75rem;
+            color: #999;
+        }
+        
+        .note-card .note-text {
+            color: #e0d5c5;
+            line-height: 1.8;
+            font-size: 1rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .note-card .delete-note-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255,0,0,0.5);
+            border: none;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            opacity: 0;
+            transition: opacity 0.3s, background 0.3s;
+        }
+        
+        .note-card:hover .delete-note-btn { opacity: 1; }
+        .note-card .delete-note-btn:hover { background: rgba(255,0,0,0.8); }
+        
+        .note-form-area {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(201, 166, 107, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .note-textarea {
+            width: 100%;
+            min-height: 120px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(201, 166, 107, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            color: #e0d5c5;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 1rem;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+        
+        .note-textarea:focus {
+            outline: none;
+            border-color: #c9a66b;
+            box-shadow: 0 0 20px rgba(201, 166, 107, 0.2);
+        }
+        
+        .note-textarea::placeholder { color: #888; }
+        
+        .author-select {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .author-option {
+            padding: 10px 25px;
+            border-radius: 50px;
+            border: 2px solid rgba(201, 166, 107, 0.4);
+            background: transparent;
+            color: #f5e6d3;
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .author-option:hover {
+            border-color: #c9a66b;
+        }
+        
+        .author-option.selected {
+            background: linear-gradient(135deg, #c9a66b, #8b7355);
+            border-color: #c9a66b;
+            color: white;
         }
         
         ::-webkit-scrollbar { width: 8px; }
@@ -630,13 +757,11 @@
 
     <!-- Opening Overlay with Video -->
     <div id="openingOverlay">
-        <!-- Click to Enter Button -->
         <button id="clickToEnter" onclick="enterWebsite()">
             <i class="fas fa-play ml-2"></i>
             اضغط لفتح الدعوة
         </button>
         
-        <!-- Video Container -->
         <div class="video-container" id="videoContainer">
             <video id="introVideo" playsinline>
                 <source src="https://res.cloudinary.com/daejiq0gc/video/upload/f_auto:video/%D8%A7%D8%BA%D9%86%D9%8A%D8%A9___%D8%A7%D9%87_%D9%8A%D8%A7_%D8%A8%D8%AE%D8%AA%D9%8A_%D8%A8%D9%8A%D9%87%D8%A7__%D8%B3%D8%AD%D8%B1%D8%A7%D9%86%D9%8A_%D9%88_%D8%B9%D9%8A%D9%88%D9%86%D9%87_%D8%AC%D8%A8%D8%A7%D8%B1%D9%87_%D8%A7%D9%84%D8%B2%D9%8A%D9%86___Audio_Ah_Ya_Ba5te_Beha___ELzayn___lzhymg?_s=vp-3.13.0" type="video/mp4">
@@ -644,18 +769,14 @@
             </video>
         </div>
         
-        <!-- Couple Image -->
         <img src="https://i.pinimg.com/564x/d4/7b/94/d47b94d417364a665592cb7dcc22bf96.jpg" alt="أحمد و هاجر" class="couple-image" id="coupleImage">
         
-        <!-- Center Heart -->
         <div class="centerHeart" id="centerHeart" onclick="openWebsite()">
             <i class="fas fa-heart"></i>
         </div>
         
-        <!-- Click Hint -->
         <p class="clickHint" id="clickHint">اضغط على القلب لفتح الدعوة ✨</p>
         
-        <!-- Floating Hearts Container -->
         <div id="floatingHearts"></div>
     </div>
 
@@ -688,6 +809,7 @@
                 <a href="#story" class="hover:text-primary transition">قصتنا</a>
                 <a href="#details" class="hover:text-primary transition">تفاصيل الخطوبة</a>
                 <a href="#photos" class="hover:text-primary transition">صورنا</a>
+                <a href="#notes" class="hover:text-primary transition">ملاحظاتنا</a>
             </div>
             <button class="md:hidden text-gray-200 focus:outline-none" onclick="toggleMenu()">
                 <i class="fas fa-bars text-2xl"></i>
@@ -698,6 +820,7 @@
             <a href="#story" class="block hover:text-primary" onclick="toggleMenu()">قصتنا</a>
             <a href="#details" class="block hover:text-primary" onclick="toggleMenu()">تفاصيل الخطوبة</a>
             <a href="#photos" class="block hover:text-primary" onclick="toggleMenu()">صورنا</a>
+            <a href="#notes" class="block hover:text-primary" onclick="toggleMenu()">ملاحظاتنا</a>
         </div>
     </nav>
 
@@ -707,13 +830,10 @@
             <p class="text-lg md:text-xl mb-4 tracking-widest uppercase font-light text-secondary">ندعوكم لحضور خطوبة</p>
             <h1 class="text-5xl md:text-7xl font-serif font-bold mb-6 text-white drop-shadow-lg">أحمد <span class="text-primary">&</span> هاجر</h1>
             <div class="w-24 h-1 bg-primary mx-auto mb-6"></div>
-            <p class="text-2xl md:text-3xl font-light mb-2">5 أبريل 2026</p>
-            <p class="text-lg md:text-xl font-medium text-secondary mb-4">الساعة 7 مساءاً</p>
             
-            <!-- Elapsed Time Counter -->
             <div class="text-center mb-4">
                 <p class="text-secondary text-lg mb-2">
-                    <i class="fas fa-heart text-red-400"></i>
+                    <i class="fas fa-heart text-red-400 heart-beat"></i>
                     معاً منذ 8 أبريل 2026
                 </p>
             </div>
@@ -797,25 +917,16 @@
                     <div class="text-right space-y-8">
                         <div class="flex items-start gap-4">
                             <div class="glass-card p-4 rounded-full text-primary">
+                                <i class="fas fa-heart text-2xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">أول لقاء</h3>
+                                <p class="text-gray-200">8 أبريل 2026</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="glass-card p-4 rounded-full text-primary">
                                 <i class="far fa-calendar-alt text-2xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-bold mb-2">التاريخ</h3>
-                                <p class="text-gray-200">الأحد، 5 أبريل 2026</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-4">
-                            <div class="glass-card p-4 rounded-full text-primary">
-                                <i class="far fa-clock text-2xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-bold mb-2">الوقت</h3>
-                                <p class="text-gray-200">يبدأ الحفل في الساعة 7:00 مساءً</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-4">
-                            <div class="glass-card p-4 rounded-full text-primary">
-                                <i class="fas fa-map-marker-alt text-2xl"></i>
                             </div>
                             <div>
                                 <h3 class="text-xl font-bold mb-2">المكان</h3>
@@ -825,11 +936,11 @@
                         </div>
                         <div class="flex items-start gap-4">
                             <div class="glass-card p-4 rounded-full text-primary">
-                                <i class="fas fa-heart text-2xl"></i>
+                                <i class="fas fa-clock text-2xl"></i>
                             </div>
                             <div>
-                                <h3 class="text-xl font-bold mb-2">أول لقاء</h3>
-                                <p class="text-gray-200">8 أبريل 2026</p>
+                                <h3 class="text-xl font-bold mb-2">الوقت</h3>
+                                <p class="text-gray-200">يبدأ الحفل في الساعة 7:00 مساءً</p>
                             </div>
                         </div>
                     </div>
@@ -849,7 +960,6 @@
                     <h2 class="text-4xl font-serif font-bold text-primary mb-4">صورنا</h2>
                     <p class="text-gray-200 mb-8">لحظات من حبنا نشاركها معكم</p>
                     
-                    <!-- Upload Button -->
                     <label for="photoInput" class="upload-btn cursor-pointer" id="uploadBtn">
                         <i class="fas fa-camera"></i>
                         رفع صورة جديدة
@@ -857,21 +967,71 @@
                     <input type="file" id="photoInput" accept="image/*">
                 </div>
                 
-                <!-- Loading State -->
                 <div class="text-center py-10" id="photosLoading">
                     <div class="spinner mx-auto mb-4"></div>
                     <p class="text-gray-400">جاري تحميل الصور من السحابة...</p>
                 </div>
                 
-                <!-- Photo Gallery -->
-                <div class="photo-gallery" id="photoGallery" style="display: none;">
-                    <!-- Photos will be loaded from Firebase -->
-                </div>
+                <div class="photo-gallery" id="photoGallery" style="display: none;"></div>
                 
                 <p class="text-center text-gray-400 mt-8 text-sm">
                     <i class="fas fa-cloud"></i>
                     الصور محفوظة على السحابة ومتاحة من أي جهاز
                 </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Notes Section -->
+    <section id="notes" class="py-20 px-4">
+        <div class="container mx-auto">
+            <div class="glass-card p-8 md:p-12 fade-in">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-serif font-bold text-primary mb-4">
+                        <i class="fas fa-envelope-open-text text-primary"></i>
+                        ملاحظاتنا
+                    </h2>
+                    <p class="text-gray-200 mb-4">اكتبوا ملاحظاتكم لبعض واحفظوها على السحابة</p>
+                    <p class="text-sm text-gray-400">
+                        <i class="fas fa-cloud"></i>
+                        الملاحظات محفوظة ومتاحة من أي جهاز
+                    </p>
+                </div>
+                
+                <!-- Note Form -->
+                <div class="note-form-area" id="noteFormArea">
+                    <div class="author-select mb-4">
+                        <button class="author-option selected" onclick="selectAuthor('أحمد', this)" data-author="أحمد">
+                            <i class="fas fa-mars"></i> أحمد
+                        </button>
+                        <button class="author-option" onclick="selectAuthor('هاجر', this)" data-author="هاجر">
+                            <i class="fas fa-venus"></i> هاجر
+                        </button>
+                    </div>
+                    <textarea class="note-textarea" id="noteTextarea" placeholder="اكتب ملاحظتك هنا... 💕" maxlength="500"></textarea>
+                    <div class="flex justify-between items-center mt-4">
+                        <span class="text-gray-400 text-sm"><span id="charCount">0</span>/500</span>
+                        <button class="note-submit-btn" onclick="submitNote()">
+                            <i class="fas fa-paper-plane"></i>
+                            إرسال الملاحظة
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Loading State -->
+                <div class="text-center py-10" id="notesLoading">
+                    <div class="spinner mx-auto mb-4"></div>
+                    <p class="text-gray-400">جاري تحميل الملاحظات...</p>
+                </div>
+                
+                <!-- Notes Grid -->
+                <div class="notes-grid" id="notesGrid" style="display: none;"></div>
+                
+                <!-- Empty State -->
+                <div class="text-center py-10 text-gray-400 hidden" id="notesEmpty">
+                    <i class="fas fa-comment-dots text-5xl mb-4 text-primary/50"></i>
+                    <p>لا توجد ملاحظات بعد. ابدأ بكتابة أول ملاحظة!</p>
+                </div>
             </div>
         </div>
     </section>
@@ -892,7 +1052,6 @@
                 </a>
             </div>
             
-            <!-- Logo Section -->
             <div class="mb-8">
                 <p class="text-primary font-serif text-xl mb-4">تم التصميم بكل حب ❤️</p>
                 <img src="https://i.postimg.cc/9X9srHCR/w_removebg_preview_removebg_preview.png" alt="Logo" class="w-32 h-32 mx-auto object-contain hover:scale-110 transition duration-300">
@@ -940,9 +1099,7 @@
                 
                 container.appendChild(heart);
                 
-                setTimeout(() => {
-                    heart.remove();
-                }, 5000);
+                setTimeout(() => { heart.remove(); }, 5000);
             }, 400);
         }
         
@@ -962,19 +1119,13 @@
             video.loop = false;
             video.removeAttribute('loop');
             
-            video.play().then(() => {
-                console.log('Video playing with sound!');
-            }).catch(error => {
-                console.log('Video play error:', error);
-            });
+            video.play().catch(() => {});
             
             video.onended = function() {
                 videoContainer.style.display = 'none';
                 
                 coupleImage.style.display = 'block';
-                setTimeout(() => {
-                    coupleImage.classList.add('visible');
-                }, 100);
+                setTimeout(() => { coupleImage.classList.add('visible'); }, 100);
                 
                 setTimeout(() => {
                     coupleImage.style.opacity = '0';
@@ -989,7 +1140,7 @@
             };
         }
         
-        // Open Website when heart is clicked
+        // Open Website
         function openWebsite() {
             const heart = document.getElementById('centerHeart');
             const overlay = document.getElementById('openingOverlay');
@@ -1005,9 +1156,7 @@
                 
                 setTimeout(() => {
                     overlay.classList.add('hidden');
-                    setTimeout(() => {
-                        overlay.style.display = 'none';
-                    }, 1500);
+                    setTimeout(() => { overlay.style.display = 'none'; }, 1500);
                 }, 800);
             }, 500);
         }
@@ -1042,13 +1191,11 @@
                     particle.style.opacity = '0';
                 }, 10);
                 
-                setTimeout(() => {
-                    particle.remove();
-                }, 1600);
+                setTimeout(() => { particle.remove(); }, 1600);
             }
         }
 
-        // Music Player Functions
+        // Music Player
         const audioElement = document.getElementById('weddingMusic');
         const musicBtn = document.getElementById('musicBtn');
         const musicIcon = document.getElementById('musicIcon');
@@ -1058,13 +1205,10 @@
         function playMusic() {
             audioElement.volume = 0.8;
             audioElement.currentTime = 15;
-            
             audioElement.play().then(() => {
                 isPlaying = true;
                 updateMusicUI();
-            }).catch(error => {
-                console.log('Music play error:', error);
-            });
+            }).catch(() => {});
         }
 
         function toggleMusic() {
@@ -1092,7 +1236,7 @@
             }
         }
 
-        // Firebase Photo Functions
+        // Firebase Photos
         async function loadPhotosFromFirebase() {
             try {
                 const photosLoading = document.getElementById('photosLoading');
@@ -1122,7 +1266,7 @@
             } catch (error) {
                 console.error('Error loading photos:', error);
                 document.getElementById('photosLoading').innerHTML = `
-                    <p class="text-red-400">حدث خطأ في تحميل الصور. يرجى المحاولة مرة أخرى.</p>
+                    <p class="text-red-400">حدث خطأ في تحميل الصور</p>
                 `;
             }
         }
@@ -1134,7 +1278,7 @@
             photoItem.setAttribute('data-id', docId);
             photoItem.innerHTML = `
                 <img src="${imageUrl}" alt="صورة" onclick="openImageModal('${imageUrl}')" loading="lazy">
-                <div class="photo-date">${dateStr}</div>
+                <div class="photo-date">${dateStr || ''}</div>
                 <button class="delete-photo-btn" onclick="deletePhoto('${docId}', '${imageUrl}')" title="حذف">
                     <i class="fas fa-times"></i>
                 </button>
@@ -1146,7 +1290,6 @@
             const file = event.target.files[0];
             if (!file) return;
             
-            // Show progress
             const uploadProgress = document.getElementById('uploadProgress');
             const progressBarFill = document.getElementById('progressBarFill');
             const progressPercent = document.getElementById('progressPercent');
@@ -1157,11 +1300,8 @@
             uploadBtn.style.opacity = '0.6';
             
             try {
-                // Create unique filename
                 const filename = `wedding-photos/${Date.now()}_${file.name}`;
                 const storageRef = storage.ref(filename);
-                
-                // Upload to Firebase Storage
                 const uploadTask = storageRef.put(file);
                 
                 uploadTask.on('state_changed', 
@@ -1178,10 +1318,8 @@
                         uploadBtn.style.opacity = '1';
                     },
                     async () => {
-                        // Upload complete, get download URL
                         const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
                         
-                        // Save to Firestore
                         const dateStr = new Date().toLocaleDateString('ar-EG', {
                             year: 'numeric',
                             month: 'long',
@@ -1197,17 +1335,13 @@
                             filename: filename
                         });
                         
-                        // Add to gallery
                         addPhotoElement(downloadURL, dateStr, 'new');
                         
-                        // Reset UI
                         uploadProgress.style.display = 'none';
                         uploadBtn.style.pointerEvents = 'auto';
                         uploadBtn.style.opacity = '1';
                         progressBarFill.style.width = '0%';
                         progressPercent.textContent = '0%';
-                        
-                        // Reset file input
                         event.target.value = '';
                     }
                 );
@@ -1224,18 +1358,15 @@
             if (!confirm('هل أنت متأكد من حذف هذه الصورة؟')) return;
             
             try {
-                // Delete from Firestore
                 if (docId !== 'new') {
                     await db.collection('wedding-photos').doc(docId).delete();
                 }
                 
-                // Delete from Storage
                 const filename = imageUrl.split('/').slice(4).join('/');
                 if (filename) {
                     await storage.ref(decodeURIComponent(filename)).delete().catch(() => {});
                 }
                 
-                // Remove from DOM
                 const photoItem = document.querySelector(`.photo-item[data-id="${docId}"]`);
                 if (photoItem) {
                     photoItem.style.animation = 'slideIn 0.3s ease-out reverse';
@@ -1262,7 +1393,165 @@
             document.body.style.overflow = 'auto';
         }
 
-        // Elapsed Time Counter (counts UP from April 8, 2026)
+        // Notes Functions
+        let selectedAuthor = 'أحمد';
+        let isSubmittingNote = false;
+
+        function selectAuthor(authorName, btn) {
+            selectedAuthor = authorName;
+            document.querySelectorAll('.author-option').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+        }
+
+        // Character count
+        const noteTextarea = document.getElementById('noteTextarea');
+        const charCount = document.getElementById('charCount');
+        noteTextarea.addEventListener('input', () => {
+            charCount.textContent = noteTextarea.value.length;
+        });
+
+        async function submitNote() {
+            const text = noteTextarea.value.trim();
+            if (!text) {
+                alert('اكتب ملاحظتك أولاً!');
+                return;
+            }
+            if (isSubmittingNote) return;
+            
+            isSubmittingNote = true;
+            const submitBtn = document.querySelector('.note-submit-btn');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
+            submitBtn.disabled = true;
+            
+            try {
+                const now = new Date();
+                const dateStr = now.toLocaleDateString('ar-EG', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                const noteRef = await db.collection('wedding-notes').add({
+                    author: selectedAuthor,
+                    text: text,
+                    date: dateStr,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                addNoteElement({
+                    author: selectedAuthor,
+                    text: text,
+                    date: dateStr
+                }, noteRef.id);
+
+                noteTextarea.value = '';
+                charCount.textContent = '0';
+            } catch (error) {
+                console.error('Error submitting note:', error);
+                alert('حدث خطأ أثناء إرسال الملاحظة');
+            } finally {
+                isSubmittingNote = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الملاحظة';
+                submitBtn.disabled = false;
+            }
+        }
+
+        function addNoteElement(noteData, docId) {
+            const notesGrid = document.getElementById('notesGrid');
+            const noteCard = document.createElement('div');
+            noteCard.className = 'note-card';
+            noteCard.setAttribute('data-note-id', docId);
+            
+            const authorEmoji = noteData.author === 'أحمد' ? '🤵' : '👰';
+            const authorColor = noteData.author === 'أحمد' ? '#4a90d9' : '#e91e63';
+            
+            noteCard.innerHTML = `
+                <div class="note-author">
+                    <div class="author-avatar" style="background: ${authorColor}">
+                        ${authorEmoji}
+                    </div>
+                    <div>
+                        <div class="author-name">${noteData.author}</div>
+                        <div class="note-date">${noteData.date || ''}</div>
+                    </div>
+                </div>
+                <div class="note-text">${escapeHtml(noteData.text)}</div>
+                <button class="delete-note-btn" onclick="deleteNote('${docId}')" title="حذف">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            notesGrid.insertBefore(noteCard, notesGrid.firstChild);
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        async function loadNotesFromFirebase() {
+            try {
+                const notesLoading = document.getElementById('notesLoading');
+                const notesGrid = document.getElementById('notesGrid');
+                const notesEmpty = document.getElementById('notesEmpty');
+                notesGrid.innerHTML = '';
+                
+                const snapshot = await db.collection('wedding-notes')
+                    .orderBy('timestamp', 'desc')
+                    .get();
+                
+                if (snapshot.empty) {
+                    notesLoading.style.display = 'none';
+                    notesEmpty.classList.remove('hidden');
+                } else {
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        addNoteElement(data, doc.id);
+                    });
+                    
+                    notesLoading.style.display = 'none';
+                    notesGrid.style.display = 'grid';
+                }
+            } catch (error) {
+                console.error('Error loading notes:', error);
+                document.getElementById('notesLoading').innerHTML = `
+                    <p class="text-red-400">حدث خطأ في تحميل الملاحظات</p>
+                `;
+            }
+        }
+
+        async function deleteNote(docId) {
+            if (!confirm('هل أنت متأكد من حذف هذه الملاحظة؟')) return;
+            
+            try {
+                await db.collection('wedding-notes').doc(docId).delete();
+                
+                const noteCard = document.querySelector(`.note-card[data-note-id="${docId}"]`);
+                if (noteCard) {
+                    noteCard.style.transition = 'all 0.3s ease';
+                    noteCard.style.opacity = '0';
+                    noteCard.style.transform = 'scale(0.8)';
+                    setTimeout(() => {
+                        noteCard.remove();
+                        
+                        // Check if no notes left
+                        const remaining = document.querySelectorAll('.note-card');
+                        if (remaining.length === 0) {
+                            document.getElementById('notesGrid').style.display = 'none';
+                            document.getElementById('notesEmpty').classList.remove('hidden');
+                        }
+                    }, 300);
+                }
+            } catch (error) {
+                console.error('Delete note error:', error);
+                alert('حدث خطأ أثناء حذف الملاحظة');
+            }
+        }
+
+        // Elapsed Time Counter
         let elapsedInterval;
         
         function initElapsedCounter() {
@@ -1311,25 +1600,18 @@
             menu.classList.toggle('hidden');
         }
 
-        // Intersection Observer for fade-in animations
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1
-        };
-
-        const observer = new IntersectionObserver((entries, observer) => {
+        // Intersection Observer
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+        const observer = new IntersectionObserver((entries, obs) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
+                    obs.unobserve(entry.target);
                 }
             });
         }, observerOptions);
 
-        document.querySelectorAll('.fade-in').forEach(el => {
-            observer.observe(el);
-        });
+        document.querySelectorAll('.fade-in').forEach(el => { observer.observe(el); });
 
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
@@ -1340,20 +1622,20 @@
 
         audioElement.addEventListener('timeupdate', () => {
             if (isPlaying) {
-                musicBars.forEach((bar, index) => {
+                musicBars.forEach((bar) => {
                     const randomHeight = Math.random() * 25 + 10;
                     bar.style.height = randomHeight + 'px';
                 });
             }
         });
 
-        // Event listeners
+        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             initElapsedCounter();
             createFloatingHearts();
             loadPhotosFromFirebase();
+            loadNotesFromFirebase();
             
-            // Setup photo upload handler
             document.getElementById('photoInput').addEventListener('change', handlePhotoUpload);
         });
     </script>
